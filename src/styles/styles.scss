@@ -1,0 +1,14 @@
+@import "theme";
+
+$material-icons-font-path: "~material-icons/iconfont/"; 
+@import "~material-icons/iconfont/material-icons.scss";
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
