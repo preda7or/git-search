@@ -1,0 +1,23 @@
+:host {
+  display: flex;
+  align-items: center;
+}
+
+.toast-icon {
+  padding: 0.5em;
+}
+
+.content {
+  white-space: pre-line;
+  padding: 0.5em;
+  margin-right: 2em;
+  display: flex;
+  align-items: center;
+}
+
+.close-icon {
+  color: black;
+  position: absolute;
+  top: 0;
+  right: 0;
+}

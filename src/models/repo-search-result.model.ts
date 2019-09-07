@@ -36,5 +36,5 @@ export interface RepoSearchResultItem {
 export interface RepoSearchResult {
   total_count: number;
   incomplete_results: boolean;
-  items: RepoSearhResultItem[];
+  items: RepoSearchResultItem[];
 }

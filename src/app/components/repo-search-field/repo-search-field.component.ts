@@ -9,7 +9,7 @@ import { StateService } from "src/app/services/state.service";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RepoSearchFieldComponent {
-  repoName: string = this.stateService.repoName$.getValue() || "";
+  repoName: string = this.stateService.repoSearchName || "";
 
   constructor(private readonly stateService: StateService) {}
 

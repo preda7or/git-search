@@ -1,0 +1,9 @@
+<mat-icon class="toast-icon">{{data?.icon}}</mat-icon>
+<div class="content"
+  [innerHTML]="data?.message"></div>
+<button mat-icon-button
+  class="close-icon"
+  type="button"
+  (click)="onClose()">
+  <mat-icon>close</mat-icon>
+</button>

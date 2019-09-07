@@ -1,0 +1,16 @@
+<ng-template #backButton>
+  <a mat-icon-button
+     [routerLink]="['/']"
+     [queryParamsHandling]="'preserve'">
+    <mat-icon>arrow_back_ios</mat-icon>
+    <h2>&nbsp;</h2>
+  </a>
+</ng-template>
+
+<div class="title-bar"
+     *ngIf="(repoInfo$|async) as repoInfo; else backButton">
+  <ng-template [ngTemplateOutlet]="backButton"></ng-template>
+  <h2>
+    {{repoInfo?.full_name}}
+  </h2>
+</div>
