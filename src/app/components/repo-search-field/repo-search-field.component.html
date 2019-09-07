@@ -1,0 +1,15 @@
+<form novalidate
+      (submit)="onSubmit($event)">
+  <mat-form-field [appearance]="'fill'">
+    <mat-label>Search repos</mat-label>
+    <button mat-mini-fab
+            matPrefix
+            color="primary"
+            type="submit">
+      <mat-icon>search</mat-icon>
+    </button>
+    <input matInput
+           name="repoName"
+           [(ngModel)]="repoName">
+  </mat-form-field>
+</form>

@@ -1,0 +1,43 @@
+@import "theme";
+
+:host {
+  display: block;
+  position: relative;
+  flex: 1 0 0%;
+}
+
+.loading-indicator {
+  background-color: mat-color($background, card, 0.6);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-column-forks_count,
+.mat-column-stargazers_count,
+.mat-column-open_issues_count {
+  width: 4.5em;
+  text-align: center;
+}
+
+.clickable {
+  cursor: pointer;
+  position: relative;
+
+  &:hover {
+    background-color: map_get($mat-light-theme-background, hover);
+  }
+
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-drag: none;
+}

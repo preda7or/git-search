@@ -1,0 +1,6 @@
+@import "~@angular/material/_theming.scss";
+
+$theme: mat-light-theme($mat-indigo, $mat-pink);
+
+$background: map-get($theme, background);
+$foreground: map-get($theme, foreground);
