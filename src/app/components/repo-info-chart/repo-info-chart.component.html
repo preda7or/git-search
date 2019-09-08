@@ -1,7 +1,6 @@
 <ng-template #backButton>
   <a mat-icon-button
-     [routerLink]="['/']"
-     [queryParamsHandling]="'preserve'">
+     (click)="onBack($event)">
     <mat-icon>arrow_back_ios</mat-icon>
     <h2>&nbsp;</h2>
   </a>

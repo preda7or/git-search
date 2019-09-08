@@ -1,18 +1,17 @@
 <div class="loading-indicator"
-     *ngIf="loading; else showResults">
+     *ngIf="loading">
   <div>
     <mat-spinner [mode]="'indeterminate'"
                  [diameter]="50"></mat-spinner>
   </div>
 </div>
 
-<ng-template #showResults>
-
-  <ng-container *ngIf="(repoSearch$|async) && !loading">
-    <ng-container *ngIf="(resultsLength$|async)>0; else noResults">
+<ng-container *ngIf="!hideResults">
+  <ng-container *ngIf="(results$|async) as results">
+    <ng-container *ngIf="results?.total_count>0; else noResults">
       <div class="table-container mat-elevation-z3">
         <table mat-table
-               [dataSource]="results$"
+               [dataSource]="results?.items"
                class="search-results">
 
           <ng-container *ngFor="let column of columns"
@@ -20,7 +19,20 @@
             <th mat-header-cell
                 *matHeaderCellDef> {{column.title}} </th>
             <td mat-cell
-                *matCellDef="let row"> {{row[column.key]}} </td>
+                *matCellDef="let row"
+                [ngSwitch]="column.key">
+              <a *ngSwitchCase="'html_url'"
+                 [href]="row[column.key]"
+                 (click)="$event.stopPropagation()"
+                 target="_blank">
+                {{row[column.key]}}
+              </a>
+              <span *ngSwitchCase="'updated_at'">
+                {{row[column.key]|date}}
+              </span>
+              <span *ngSwitchDefault>
+                {{row[column.key]}}
+              </span>
           </ng-container>
 
 
@@ -34,7 +46,8 @@
         </table>
       </div>
 
-      <mat-paginator [length]="(resultsLength$|async)"
+      <mat-paginator [length]="results?.total_count"
+                     [pageIndex]="pageIndex$|async"
                      [pageSize]="pageSize$|async"
                      [pageSizeOptions]="pageSizeOptions"
                      (page)="onPageChange($event)"
@@ -47,5 +60,3 @@
       </div>
     </ng-template>
   </ng-container>
-
-</ng-template>

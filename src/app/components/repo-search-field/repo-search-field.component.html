@@ -13,3 +13,31 @@
            [(ngModel)]="repoName">
   </mat-form-field>
 </form>
+
+<div class="sort-config">
+  <mat-form-field [appearance]="'outline'">
+    <mat-select [ngModel]="(sort$|async)"
+                (selectionChange)="onSortChange($event)"
+                name="repo-sort">
+      <mat-option *ngFor="let option of (sortOptions|keyvalue)"
+                  [value]="option.key">
+        {{option.value}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <ng-container *ngIf="(sort$|async)!==''; else noOrderingAvailable">
+    <button mat-stroked-button
+            (click)="onToggleOrder()"
+            [matTooltip]="(order$|async)==='desc'?'Descending':'Ascending'">
+      <mat-icon>{{(order$|async)==="desc"?"arrow_downward":"arrow_upward"}}</mat-icon>
+    </button>
+  </ng-container>
+  <ng-template #noOrderingAvailable>
+    <button mat-stroked-button
+            [disabled]="true">
+      <mat-icon>not_interested</mat-icon>
+    </button>
+  </ng-template>
+
+</div>

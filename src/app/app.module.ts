@@ -4,15 +4,19 @@ import { FormsModule } from "@angular/forms";
 import {
   MatAutocompleteModule,
   MatButtonModule,
+  MatButtonToggleModule,
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
   MatPaginatorModule,
   MatProgressSpinnerModule,
   MatRippleModule,
+  MatSelectModule,
   MatSnackBarModule,
+  MatSortModule,
   MatTableModule,
   MatToolbarModule,
+  MatTooltipModule,
 } from "@angular/material";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -28,19 +32,24 @@ import { RepoSearchPageComponent } from "./components/repo-search-page/repo-sear
 import { RepoSearchResultsComponent } from "./components/repo-search-results/repo-search-results.component";
 import { CustomToastComponent } from "./components/toast/toast.component";
 import { TopNavComponent } from "./components/top-nav/top-nav.component";
+import { WINDOW_PROVIDERS } from "./services/window.service";
 
 const materialModules = [
   MatAutocompleteModule,
   MatButtonModule,
+  MatButtonToggleModule,
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
   MatPaginatorModule,
   MatProgressSpinnerModule,
   MatRippleModule,
+  MatSelectModule,
+  MatSnackBarModule,
+  MatSortModule,
   MatTableModule,
   MatToolbarModule,
-  MatSnackBarModule,
+  MatTooltipModule,
 ];
 
 @NgModule({
@@ -57,7 +66,7 @@ const materialModules = [
     RepoInfoChartComponent,
     CustomToastComponent,
   ],
-  providers: [],
+  providers: [WINDOW_PROVIDERS],
   bootstrap: [AppComponent],
   entryComponents: [CustomToastComponent],
 })

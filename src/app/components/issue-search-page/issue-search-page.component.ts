@@ -19,7 +19,7 @@ export class IssueSearchPageComponent extends AutoUnsubscribe implements OnInit 
   ngOnInit() {
     super.addSubscription(
       this.route.paramMap.subscribe((params) => {
-        this.stateService.issueRepo$.next(params.get("repoId"));
+        this.stateService.issueRepo$.next(params.get("repoId") || "");
       })
     );
   }

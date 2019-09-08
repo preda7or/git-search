@@ -1,12 +1,16 @@
-export type SortParamOptions = string;
-// export enum SortParamOptions {
-//   stras = "stars",
-//   forks = "forks",
-//   helpWanted = "help-wanted-issues",
-//   updated = "updated",
-// }
+export type RepoSortParamOptions = "stars" | "forks" | "help-wanted-issues" | "updated";
 
-export enum OrderParamOptions {
-  desc = "desc",
-  asc = "asc",
-}
+export type IssueSortParamOptions =
+  | "comments"
+  | "reactions"
+  | "reactions-+1"
+  | "reactions--1"
+  | "reactions-smile"
+  | "reactions-thinking_face"
+  | "reactions-heart"
+  | "reactions-tada"
+  | "interactions"
+  | "created"
+  | "update";
+
+export type OrderParamOptions = "desc" | "asc";

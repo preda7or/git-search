@@ -18,17 +18,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1;
 }
 
 .table-container {
   position: relative;
   overflow: auto;
-  
+
   flex: 1 0 0%;
   margin: 1em;
 
   table {
     width: 100%;
+
+    td,
+    th {
+      padding: 0 0.5em
+    }
   }
 }
 

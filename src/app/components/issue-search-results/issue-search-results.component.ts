@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from "@
 import { PageEvent } from "@angular/material";
 
 import { BehaviorSubject, combineLatest } from "rxjs";
-import { filter, map, switchMap, tap } from "rxjs/operators";
+import { map } from "rxjs/operators";
 import { IssueSearchResultItem } from "src/models/issue-search-result.model";
 import { HasLoadingState } from "src/utils/has-loading-state.base";
 
@@ -47,20 +47,22 @@ export class IssueSearchResultsComponent extends HasLoadingState implements OnIn
   }
 
   ngOnInit() {
-    super.addSubscription(
-      combineLatest([this.stateService.issueRepo$, this.stateService.issueSort$, this.stateService.issueOrder$])
-        .pipe(
-          filter(([repoName]) => repoName != null && repoName !== ""),
-          tap(() => (this.loading = true)),
-          // tslint:disable-next-line: no-non-null-assertion
-          switchMap(([repoName, sort, order]) => this.gitSearchService.getIssuesResults(repoName!, sort, order))
-        )
-        .subscribe((result) => {
-          this.loading = false;
-          this.results$.next(result.items);
-          this.resultsLength$.next(result.total_count);
-        },(error)=>this.toast)
-    );
+    // super.addSubscription(
+    //   combineLatest([this.stateService.issueRepo$, this.stateService.issueSort$, this.stateService.issueOrder$])
+    //     .pipe(
+    //       filter(([repoName]) => repoName != null && repoName !== ""),
+    //       tap(() => (this.loading = true)),
+    //       // tslint:disable-next-line: no-non-null-assertion
+    //       switchMap(([repoName, sort, order]) => this.gitSearchService.getIssuesResults(repoName!, sort, order))
+    //     )
+    //     .subscribe((result) => {
+    //       this.loading = false;
+    //       if (result != null) {
+    //         this.results$.next(result.items);
+    //         this.resultsLength$.next(result.total_count);
+    //       }
+    //     })
+    // );
   }
 
   onPageChange(e: PageEvent) {
