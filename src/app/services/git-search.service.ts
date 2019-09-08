@@ -23,13 +23,13 @@ export class GitSearchService {
   }
 
   getRepoResults(config: RepoSearchConfig) {
-    const api = `${this._apiRoot}/search/repositories`;
     const { name, ...additionalParams } = config;
 
     if (!isNotNullEmpty(name)) {
       return of(null);
     }
 
+    const api = `${this._apiRoot}/search/repositories`;
     const params: HttpParamsLiteral = { q: `${name}+in:name` };
     if (isNotNullEmpty(additionalParams.order)) {
       params.order = additionalParams.order;
@@ -46,15 +46,30 @@ export class GitSearchService {
     return this.getWithErrorHandling<RepoSearchResult>(api, { params });
   }
 
-  getIssuesResults(repoFullname: string, { pageIndex, pageSize, sort, order }: IssueSearchConfig) {
+  getIssuesResults(repoFullname: string | null, config: IssueSearchConfig) {
+    if (!isNotNullEmpty(repoFullname)) {
+      return of(null);
+    }
+
     const api = `${this._apiRoot}/search/issues`;
-    const params: HttpParamsLiteral = { q: `repo:${repoFullname}`, page: String(pageIndex), per_page: String(pageSize), sort, order };
+    const params: HttpParamsLiteral = { q: `repo:${repoFullname}` };
+    const additionalParams = config;
+    if (isNotNullEmpty(additionalParams.pageIndex)) {
+      params.page = String(additionalParams.pageIndex + 1);
+    }
+    if (isNotNullEmpty(additionalParams.pageSize)) {
+      params.per_page = String(additionalParams.pageSize);
+    }
     return this.getWithErrorHandling<IssueSearchResult>(api, { params });
   }
 
   private getWithErrorHandling<T>(url: string, options?: { params?: HttpParamsLiteral }): Observable<T | null> {
     return this.http.get<T>(url, options).pipe(
-      catchError((error: HttpErrorResponse) => (this.toastService.error(`An error occured: ${error.statusText}`), of(null))),
+      catchError(
+        (error: HttpErrorResponse) => (
+          this.toastService.error(`An error occured: ${(error && error.error && error.error.message) || error.statusText}`), of(null)
+        )
+      ),
       share()
     );
   }

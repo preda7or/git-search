@@ -2,7 +2,7 @@ import { Injectable, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 
 import { BehaviorSubject } from "rxjs";
-import { IssueSortParamOptions, OrderParamOptions, RepoSortParamOptions } from "src/models/repo-search-params";
+import { OrderParamOptions, RepoSortParamOptions } from "src/models/repo-search-params";
 import { IssueSearchConfig, RepoSearchConfig } from "src/models/search-configs";
 import { AutoUnsubscribe } from "src/utils/auto-unsubscribe.base";
 
@@ -20,7 +20,7 @@ export class StateService extends AutoUnsubscribe implements OnDestroy {
    * from the isssue page, due to the nature of inital navigation on loading the app.
    */
   readonly issueRepo$ = new BehaviorSubject<string | null>(null);
-  readonly issueSearch$ = new BehaviorSubject<IssueSearchConfig>({ sort: "", order: "", pageIndex: null, pageSize: null });
+  readonly issueSearch$ = new BehaviorSubject<IssueSearchConfig>({ pageIndex: null, pageSize: null });
 
   get repoSearchName() {
     return this.repoSearch$.getValue().name;
@@ -46,8 +46,6 @@ export class StateService extends AutoUnsubscribe implements OnDestroy {
         });
 
         this.issueSearch$.next({
-          sort: (params.get("issueSort") as IssueSortParamOptions) || "",
-          order: (params.get("issueOrder") as OrderParamOptions) || "",
           pageIndex: parseInt(params.get("issuePageIndex") || "", 10) || null,
           pageSize: parseInt(params.get("issuePageSize") || "", 10) || null,
         });
@@ -71,7 +69,7 @@ export class StateService extends AutoUnsubscribe implements OnDestroy {
 
   /**
    * We merge the changed sorting parameters with the existing query parameters
-   * for the repo search...
+   * for the repo search and pagination.
    */
   updateRepoSort(config: { repoSort?: RepoSortParamOptions; repoOrder?: OrderParamOptions }) {
     const prevSearchConfig = this.repoSearch$.getValue();
@@ -86,21 +84,6 @@ export class StateService extends AutoUnsubscribe implements OnDestroy {
 
   updateRepoPagination(repoPageIndex: number | null, repoPageSize: number | null) {
     this.router.navigate([], { queryParams: { repoPageIndex, repoPageSize }, replaceUrl: true, queryParamsHandling: "merge" });
-  }
-
-  /**
-   * ... and for the issue listing.
-   */
-  updateIssueSort(sort: IssueSortParamOptions, order: OrderParamOptions) {
-    // if (sort.active && sort.direction) {
-    //   this.router.navigate([], {
-    //     queryParams: { issueSort: sort.active, issueOrder: sort.direction },
-    //     queryParamsHandling: "merge",
-    //     replaceUrl: true,
-    //   });
-    // } else {
-    //   this.router.navigate([], { queryParams: {}, replaceUrl: true });
-    // }
   }
 
   updateIssuePagination(issuePageIndex: number | null, issuePageSize: number | null) {

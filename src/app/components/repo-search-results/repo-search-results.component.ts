@@ -33,7 +33,7 @@ export class RepoSearchResultsComponent extends HasLoadingState implements OnIni
 
   readonly results$ = new BehaviorSubject<RepoSearchResult>({ total_count: 0, items: [] });
 
-  readonly pageIndex$ = this.stateService.repoSearch$.pipe(map((searchConfig) => searchConfig.pageIndex || 1));
+  readonly pageIndex$ = this.stateService.repoSearch$.pipe(map((searchConfig) => searchConfig.pageIndex || 0));
   readonly pageSize$ = this.stateService.repoSearch$.pipe(map((searchConfig) => searchConfig.pageSize || 30));
 
   readonly repoSearch$ = this.stateService.repoSearch$.pipe(
@@ -69,11 +69,13 @@ export class RepoSearchResultsComponent extends HasLoadingState implements OnIni
            * Show loading spinner
            */
           tap(() => {
+            /** Loading change invokes change detection in base class! */
             this.loading = true;
           }),
           switchMap((searchConfig) => this.gitSearchService.getRepoResults(searchConfig)),
           tap(() => {
             this.hideResults = false;
+            /** Loading change invokes change detection in base class! */
             this.loading = false;
           })
         )

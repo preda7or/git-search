@@ -8,10 +8,11 @@
 
 <ng-template #showResults>
 
-    <ng-container *ngIf="(resultsLength$|async)>0; else noResults">
+  <ng-container *ngIf="(results$|async) as results">
+    <ng-container *ngIf="results?.total_count>0; else noResults">
       <div class="table-container mat-elevation-z3">
         <table mat-table
-               [dataSource]="results$"
+               [dataSource]="results?.items"
                class="search-results">
 
           <ng-container *ngFor="let column of columns"
@@ -37,7 +38,8 @@
         </table>
       </div>
 
-      <mat-paginator [length]="(resultsLength$|async)"
+      <mat-paginator [length]="results?.total_count"
+                     [pageIndex]="pageIndex$|async"
                      [pageSize]="pageSize$|async"
                      [pageSizeOptions]="pageSizeOptions"
                      (page)="onPageChange($event)"
@@ -49,5 +51,6 @@
         No results found!
       </div>
     </ng-template>
+  </ng-container>
 
 </ng-template>

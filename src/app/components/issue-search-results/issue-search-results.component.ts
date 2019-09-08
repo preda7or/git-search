@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from "@
 import { PageEvent } from "@angular/material";
 
 import { BehaviorSubject, combineLatest } from "rxjs";
-import { map } from "rxjs/operators";
-import { IssueSearchResultItem } from "src/models/issue-search-result.model";
+import { map, switchMap, tap } from "rxjs/operators";
+import { IssueSearchResult, IssueSearchResultItem } from "src/models/issue-search-result.model";
 import { HasLoadingState } from "src/utils/has-loading-state.base";
 
 import { GitSearchService } from "src/app/services/git-search.service";
@@ -27,14 +27,12 @@ export class IssueSearchResultsComponent extends HasLoadingState implements OnIn
   readonly displayedColumns = Columns.map((column) => column.key);
   readonly pageSizeOptions = [10, 30, 50, 100];
 
-  readonly results$ = new BehaviorSubject<IssueSearchResultItem[]>([]);
-  readonly resultsLength$ = new BehaviorSubject<number>(0);
-  readonly pageIndex$ = new BehaviorSubject<number>(0);
-  readonly pageSize$ = new BehaviorSubject<number>(30);
+  readonly results$ = new BehaviorSubject<IssueSearchResult>({ total_count: 0, items: [] });
 
-  readonly resultsPage$ = combineLatest([this.results$, this.pageSize$, this.pageIndex$]).pipe(
-    map(([results, pageSize, pageIndex]) => results.slice(pageSize * pageIndex, pageSize * (pageIndex + 1)))
-  );
+  readonly pageIndex$ = this.stateService.issueSearch$.pipe(map((searchConfig) => searchConfig.pageIndex || 0));
+  readonly pageSize$ = this.stateService.issueSearch$.pipe(map((searchConfig) => searchConfig.pageSize || 30));
+
+  hideResults = true;
 
   constructor(
     readonly cdr: ChangeDetectorRef,
@@ -43,34 +41,29 @@ export class IssueSearchResultsComponent extends HasLoadingState implements OnIn
   ) {
     super(cdr);
 
-    super.addSubjects(this.results$, this.resultsLength$, this.pageIndex$, this.pageSize$);
+    super.addSubjects(this.results$);
   }
 
   ngOnInit() {
-    // super.addSubscription(
-    //   combineLatest([this.stateService.issueRepo$, this.stateService.issueSort$, this.stateService.issueOrder$])
-    //     .pipe(
-    //       filter(([repoName]) => repoName != null && repoName !== ""),
-    //       tap(() => (this.loading = true)),
-    //       // tslint:disable-next-line: no-non-null-assertion
-    //       switchMap(([repoName, sort, order]) => this.gitSearchService.getIssuesResults(repoName!, sort, order))
-    //     )
-    //     .subscribe((result) => {
-    //       this.loading = false;
-    //       if (result != null) {
-    //         this.results$.next(result.items);
-    //         this.resultsLength$.next(result.total_count);
-    //       }
-    //     })
-    // );
+    super.addSubscription(
+      combineLatest([this.stateService.issueRepo$, this.stateService.issueSearch$])
+        .pipe(
+          tap(() => {
+            /** Loading change invokes change detection in base class! */
+            this.loading = true;
+          }),
+          switchMap(([repoFullname, searchConfig]) => this.gitSearchService.getIssuesResults(repoFullname, searchConfig)),
+          tap(() => {
+            this.hideResults = false;
+            /** Loading change invokes change detection in base class! */
+            this.loading = false;
+          })
+        )
+        .subscribe(this.results$)
+    );
   }
 
   onPageChange(e: PageEvent) {
-    if (e.pageIndex !== e.previousPageIndex) {
-      this.pageIndex$.next(e.pageIndex);
-    }
-    if (e.pageSize !== this.pageSize$.getValue()) {
-      this.pageSize$.next(e.pageSize);
-    }
+    this.stateService.updateIssuePagination(e.pageIndex, e.pageSize);
   }
 }

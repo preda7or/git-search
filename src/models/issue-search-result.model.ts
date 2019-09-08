@@ -77,6 +77,6 @@ export interface IssueSearchResultItem {
 
 export interface IssueSearchResult {
   total_count: number;
-  incomplete_results: boolean;
+  incomplete_results?: boolean;
   items: IssueSearchResultItem[];
 }
