@@ -23,6 +23,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
+import { IssueSearchHeaderComponent } from "./components/issue-search-header/issue-search-header.component";
 import { IssueSearchPageComponent } from "./components/issue-search-page/issue-search-page.component";
 import { IssueSearchResultsComponent } from "./components/issue-search-results/issue-search-results.component";
 import { PageNotFoundComponent } from "./components/page-not-found/page-not-found.component";
@@ -63,8 +64,9 @@ const materialModules = [
     RepoSearchPageComponent,
     IssueSearchPageComponent,
     IssueSearchResultsComponent,
-    RepoInfoChartComponent,
+    IssueSearchHeaderComponent,
     CustomToastComponent,
+    RepoInfoChartComponent,
   ],
   providers: [WINDOW_PROVIDERS],
   bootstrap: [AppComponent],

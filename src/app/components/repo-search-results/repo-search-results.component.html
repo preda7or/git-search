@@ -30,11 +30,14 @@
               <span *ngSwitchCase="'updated_at'">
                 {{row[column.key]|date}}
               </span>
+              <app-repo-info-chart [repo]="row"
+                                   [fontSize]="0.7"
+                                   [barGap]="0.3"
+                                   *ngSwitchCase="'chart'"></app-repo-info-chart>
               <span *ngSwitchDefault>
                 {{row[column.key]}}
               </span>
           </ng-container>
-
 
           <tr mat-header-row
               *matHeaderRowDef="displayedColumns; sticky: true"></tr>

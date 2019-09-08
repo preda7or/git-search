@@ -1,0 +1,21 @@
+<ng-template #backButton>
+  <div class="title-container">
+    <a mat-icon-button
+       (click)="onBack($event)">
+      <mat-icon>arrow_back_ios</mat-icon>
+      <h2>&nbsp;</h2>
+    </a>
+  </div>
+</ng-template>
+
+<div class="title-bar"
+     *ngIf="(repoInfo$|async) as repoInfo; else backButton">
+  <div class="title-container">
+    <ng-template [ngTemplateOutlet]="backButton"></ng-template>
+    <h2>
+      {{repoInfo?.full_name}}
+    </h2>
+  </div>
+  <app-repo-info-chart [repo]="repoInfo"
+                       [animate]="true"></app-repo-info-chart>
+</div>

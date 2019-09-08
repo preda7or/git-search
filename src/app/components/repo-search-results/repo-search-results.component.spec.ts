@@ -22,6 +22,7 @@ import { of } from "rxjs";
 
 import { GitSearchService } from "src/app/services/git-search.service";
 
+import { RepoInfoChartComponent } from "../repo-info-chart/repo-info-chart.component";
 import { RepoSearchResultsComponent } from "./repo-search-results.component";
 
 const materialModules = [
@@ -53,7 +54,7 @@ describe("RepoSearchResultsComponent", () => {
           useValue: {},
         },
       ],
-      declarations: [RepoSearchResultsComponent],
+      declarations: [RepoSearchResultsComponent, RepoInfoChartComponent],
     }).compileComponents();
     httpMock = TestBed.get(HttpTestingController);
   }));
@@ -105,7 +106,7 @@ describe("RepoSearchResultsComponent", () => {
     expect(searchSpy).toHaveBeenCalledWith({ name: "testRepoName", sort: "stars", order: "desc", pageIndex: 10, pageSize: 100 });
     const req = httpMock.expectOne({
       method: "GET",
-      url: `https://api.github.com/search/repositories?q=testRepoName+in:name&order=desc&sort=stars&page=9&per_page=100`,
+      url: `https://api.github.com/search/repositories?q=testRepoName+in:name&order=desc&sort=stars&page=11&per_page=100`,
     });
     req.flush({});
   }));

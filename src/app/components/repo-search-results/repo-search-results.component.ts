@@ -27,8 +27,8 @@ const Columns: Array<{ key: keyof RepoSearchResultItem; title: string }> = [
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RepoSearchResultsComponent extends HasLoadingState implements OnInit {
-  readonly columns = Columns;
-  readonly displayedColumns = Columns.map((column) => column.key);
+  readonly columns = [...Columns, { key: "chart", title: "" }];
+  readonly displayedColumns = this.columns.map((column) => column.key);
   readonly pageSizeOptions = [10, 30, 50, 100];
 
   readonly results$ = new BehaviorSubject<RepoSearchResult>({ total_count: 0, items: [] });

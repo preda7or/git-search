@@ -7,6 +7,15 @@
   text-align: center;
 }
 
+.mat-column-chart {
+  position: relative;
+  min-width: 100px;
+
+  app-repo-info-chart {
+    height: 40px;
+  }
+}
+
 .clickable {
   cursor: pointer;
   position: relative;
